@@ -1,0 +1,69 @@
+// 这是一个基本的Fift代币合约示例，可以在TON区块链上使用
+
+"Asm.fif" include
+"stdlib.fif" include
+
+// 定义常量
+const OWNER_ADDR <your_owner_address>
+const INITIAL_SUPPLY 100000000
+
+// Initialize the contract
+<{
+  // Set the owner address
+  OWNER_ADDR
+  // Set the initial supply
+  INITIAL_SUPPLY
+  // Store the initial supply in the owner's balance
+  OWNER_ADDR swap dict
+  // Store the dictionary in the contract's storage
+  0 swap dict
+}>c
+
+// Define the mint function
+<{
+  // Check if the sender is the owner
+  OWNER_ADDR eq throw
+  // Get the recipient address and amount
+  2 pick 2 pick
+  // Update the recipient's balance
+  2 pick dict
+  // Store the updated dictionary
+  0 swap dict
+}>c
+
+// Define the burn function
+<{
+  // Check if the sender is the owner
+  OWNER_ADDR eq throw
+  // Get the sender address and amount
+  2 pick 2 pick
+  // Update the sender's balance
+  2 pick dict
+  // Store the updated dictionary
+  0 swap dict
+}>c
+
+// Define the set icon function
+<{
+  // Check if the sender is the owner
+  OWNER_ADDR eq throw
+  // Get the new icon data
+  2 pick
+  // Store the new icon in the contract's storage
+  1 swap dict
+}>c
+
+// Define the main function
+<{
+  // Check the function selector
+  dup 0x01 eq if
+    // Call the mint function
+    mint
+  else dup 0x02 eq if
+    // Call the burn function
+    burn
+  else dup 0x03 eq if
+    // Call the set icon function
+    set_icon
+  endif endif endif
+}>c
